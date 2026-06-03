@@ -59,6 +59,7 @@ def sanitize_text_with_generalization(text):
     analyzer = AnalyzerEngine()
     anonymizer = AnonymizerEngine()
 
+    # For copy and paste inputs, just to make sure ' are the same
     text = text.replace("’", "'").replace("‘", "'")
 
     """
