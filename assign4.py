@@ -1,6 +1,7 @@
 from presidio_analyzer import AnalyzerEngine, PatternRecognizer, Pattern
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
+import spacy
 
 """
     TECHNIQUE 1: Generalization / k-Anonymization
@@ -128,6 +129,9 @@ def sanitize_text_with_generalization(text):
 
 
 if __name__ == "__main__":
+    # (You have to run 'python -m spacy download en_core_web_md' to install for this line)
+    nlp = spacy.load("en_core_web_md")
+
     print("Type or paste your text below (press Enter to sanitize, or type 'exit' to quit):")
     
     while True:
@@ -141,8 +145,15 @@ if __name__ == "__main__":
             continue
             
         sanitized_text = sanitize_text_with_generalization(user_input)
+
+        #generate spacy embeddings and calculates the similarity score
+        doc_a = nlp(user_input)
+        doc_b = nlp(sanitized_text)
+        similarity_score = doc_a.similarity(doc_b)
         
         print("-" * 25)
         print("Sanitized Text:")
         print(sanitized_text)
+        #similarity score is between -1 and 1, closer to 1 the more similar
+        print("Cosine Similarity score:", similarity_score)
         print("-" * 25)
